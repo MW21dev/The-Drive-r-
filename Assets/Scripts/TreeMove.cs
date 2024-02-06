@@ -15,11 +15,11 @@ public class TreeMove : MonoBehaviour
     {
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
-    void Update()
+    void FixedUpdate()
     {
-        
+        rb.velocity = new Vector2(0, -1 * speed * (manager.playerSpeed * 0.5f) * Time.fixedDeltaTime) * 100;
 
-        rb.AddForce(-transform.up * (speed * manager.playerSpeed) * 10f * Time.deltaTime);
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, speed * manager.playerSpeed * 10f);
+        //rb.AddForce(-transform.up * (speed * manager.playerSpeed) * 10f * Time.deltaTime);
+        //.velocity = Vector3.ClampMagnitude(rb.velocity, speed * manager.playerSpeed * 10f);
     }
 }

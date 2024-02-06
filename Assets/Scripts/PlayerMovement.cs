@@ -6,8 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public Transform player;
     public Rigidbody2D rb;
+    public float speed = 2f;
     bool invincible = false;
-    float speed = 2f;
 
 
 

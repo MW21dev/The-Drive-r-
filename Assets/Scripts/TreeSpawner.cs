@@ -20,7 +20,7 @@ public class TreeSpawner : MonoBehaviour
     {
         Instantiate(roadPiece, new Vector3(-4.5f, 0, 0), Quaternion.identity);
 
-        Invoke("SpawnTree", spawnTimeTree - 0.1f * manager.playerSpeed);
+        Invoke("SpawnTree", spawnTimeTree);
         Invoke("SpawnRoad", spawnTimeRoad);
 
 
@@ -44,7 +44,7 @@ public class TreeSpawner : MonoBehaviour
         Instantiate(tree, new Vector3(-0.8f, 8, 0), Quaternion.identity);
 
 
-        Invoke("SpawnTree", spawnTimeTree - 0.1f * manager.playerSpeed);
+        Invoke("SpawnTree", spawnTimeTree);
     }
 
     void SpawnRoad()

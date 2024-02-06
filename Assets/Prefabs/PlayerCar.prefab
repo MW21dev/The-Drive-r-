@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1962084762094610981}
   rb: {fileID: 1962084762094610982}
+  speed: 3
   manager: {fileID: 0}
   soundManager: {fileID: 0}
   statsManager: {fileID: 0}

@@ -22,7 +22,7 @@ public class CarSpawner : MonoBehaviour
     void Start()
     {
         
-        Invoke("Spawn", spawnTime - 0.1f * manager.playerSpeed);
+        Invoke("Spawn", spawnTime);
         Roll();
     }
 
@@ -40,7 +40,7 @@ public class CarSpawner : MonoBehaviour
         }
 
         Roll();
-        Invoke("Spawn", spawnTime - 0.1f * manager.playerSpeed);
+        Invoke("Spawn", spawnTime);
     }
 
     void Roll()

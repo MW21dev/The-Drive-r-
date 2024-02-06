@@ -11,10 +11,7 @@ public class Menu : MonoBehaviour
 {
 
     public SoundManager soundManager = null;
-    public ParticleSystem p1 = null;
-    public ParticleSystem p2 = null;
-    public ParticleSystem p3 = null;
-    public ParticleSystem p4 = null;
+    
 
     void Start()
     {
