@@ -16,14 +16,17 @@ public class GameManager : MonoBehaviour
     public SoundManager soundManager = null;
     public MusicManager musicManager = null;
     public GameObject lose = null;
+    public GameObject pause = null;
 
     void Start()
     {
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         musicManager = GameObject.Find("MusicManager").GetComponent<MusicManager>();
         lose = GameObject.Find("Lose");
+        pause = GameObject.Find("Pause");
 
         lose.SetActive(false);
+        pause.SetActive(false);
         musicManager.PlayMusic();
         Time.timeScale = 1;
 
@@ -32,12 +35,15 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) || (Input.GetKeyDown(KeyCode.W)) && playerSpeed != 15)
+        if(!pause.activeSelf)
         {
-            playerSpeed++;
-            soundManager.PlaySound(1);
+            if (Input.GetKeyDown(KeyCode.UpArrow) || (Input.GetKeyDown(KeyCode.W)) && playerSpeed != 15)
+            {
+                playerSpeed++;
+                soundManager.PlaySound(1);
+            }
         }
-
+       
         if(playerSpeed > 15f)
         {
             playerSpeed = 15f;
@@ -50,6 +56,24 @@ public class GameManager : MonoBehaviour
             lose.SetActive(true);
             musicManager.StopMusic();
 
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (pause.activeSelf)
+            {
+                Resume();
+            }
+            else
+            {
+                pause.SetActive(true);
+            }
+        }
+
+        if (pause.activeSelf)
+        {
+            Time.timeScale = 0;
+            musicManager.PauseMusic();
         }
     }
 
@@ -68,5 +92,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("Menu", LoadSceneMode.Single);
 
+    }
+
+    public void Resume()
+    {
+        soundManager.PlaySound(2);
+        Time.timeScale = 1;
+        pause.SetActive(false);
+        musicManager.UnPauseMusic();
     }
 }

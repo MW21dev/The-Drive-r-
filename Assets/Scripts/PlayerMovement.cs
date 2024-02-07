@@ -38,20 +38,30 @@ public class PlayerMovement : MonoBehaviour
             statsManager.driver.enabled = false;
             statsManager.driverR.enabled = false;
             statsManager.driverL.enabled = true;
+
+            transform.rotation = Quaternion.Euler(0, 0, -5);
+            //ojler
         }
         if(moveX < 0)
         {
             statsManager.driver.enabled = false;
             statsManager.driverL.enabled = false;
             statsManager.driverR.enabled = true;
+
+            transform.rotation = Quaternion.Euler(0, 0, 5);
+
         }
-        if(moveX == 0)
+        if (moveX == 0)
         {
             statsManager.driverR.enabled = false;
             statsManager.driverL.enabled = false;
             statsManager.driver.enabled = true;
+
+            transform.rotation = Quaternion.identity;
+
         }
- 
+
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -75,6 +85,31 @@ public class PlayerMovement : MonoBehaviour
             Invoke("ClearSmash", 1);
             invincible = true;
             
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Barier" && !invincible)
+        {
+            statsManager.driverSmash.enabled = true;
+            pr.Play();
+            soundManager.PlaySound(0);
+
+            manager.hp -= 1;
+
+
+            manager.playerSpeed = 1;
+
+            manager.score = 0;
+
+            player.transform.position = new Vector3(-3, -3, 0);
+
+
+            ClearEnemies();
+            Invoke("ClearSmash", 1);
+            invincible = true;
+
         }
     }
 

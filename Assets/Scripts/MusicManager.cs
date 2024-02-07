@@ -19,4 +19,14 @@ public class MusicManager : MonoBehaviour
     {
         musicManager.Stop();
     }
+
+    public void PauseMusic()
+    {
+        musicManager.Pause();
+    }
+    public void UnPauseMusic()
+    {
+        musicManager.UnPause();
+        
+    }
 }
