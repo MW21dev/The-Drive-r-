@@ -10,9 +10,9 @@ public class GameManager : MonoBehaviour
 
     public float score = 0;
     public float hiScore = 0;
-    
-
     public int hp = 3;
+
+    public float slowCd = 0;
 
     public SoundManager soundManager = null;
     public MusicManager musicManager = null;
@@ -44,6 +44,13 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
+        slowCd += Time.deltaTime;
+
+        if(slowCd >= 2f)
+        {
+            slowCd = 2f;
+        }
+        
         if(hiScore >= saveSystem.scoreData.recordScore)
         {
             saveSystem.scoreData.recordScore = hiScore;
@@ -57,6 +64,16 @@ public class GameManager : MonoBehaviour
                 playerSpeed++;
                 soundManager.PlaySound(1);
             }
+            /*if (slowCd == 2f && playerSpeed > 1)
+            {
+                if (Input.GetKeyDown(KeyCode.DownArrow) || (Input.GetKeyDown(KeyCode.S)))
+                {
+                    playerSpeed--;
+                    soundManager.PlaySound(3);
+                    slowCd = 0;
+                }
+            }
+            */
         }
        
         if(playerSpeed > 15f)
@@ -69,6 +86,7 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
 
             lose.SetActive(true);
+            saveSystem.LoadGame();
             musicManager.StopMusic();
 
         }

@@ -121,6 +121,34 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!invincible)
+        {
+            if (collision.gameObject.tag == "Barier")
+            {
+                statsManager.driverSmash.enabled = true;
+                pr.Play();
+                soundManager.PlaySound(0);
+
+                manager.hp -= 1;
+
+
+                manager.playerSpeed = 1;
+
+                manager.score = 0;
+
+                player.transform.position = new Vector3(-3, -3, 0);
+
+
+                ClearEnemies();
+                Invoke("ClearSmash", 1);
+                invincible = true;
+
+            }
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (!invincible)
