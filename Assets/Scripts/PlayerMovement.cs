@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform player;
     public Rigidbody2D rb;
     public float speed = 2f;
-    bool invincible = false;
+    public bool invincible = false;
 
 
 
@@ -65,51 +65,87 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Barier" && !invincible)
+        if (!invincible)
         {
-            statsManager.driverSmash.enabled = true;
-            pr.Play();
-            soundManager.PlaySound(0);
-            
-            manager.hp -= 1;
+            if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Barier")
+            {
+                statsManager.driverSmash.enabled = true;
+                pr.Play();
+                soundManager.PlaySound(0);
+
+                manager.hp -= 1;
 
 
-            manager.playerSpeed = 1;
+                manager.playerSpeed = 1;
 
-            manager.score = 0;
+                manager.score = 0;
 
-            player.transform.position = new Vector3(-3, -3, 0);
-            
+                player.transform.position = new Vector3(-3, -3, 0);
 
-            ClearEnemies();
-            Invoke("ClearSmash", 1);
-            invincible = true;
-            
+
+                ClearEnemies();
+                Invoke("ClearSmash", 1);
+                invincible = true;
+
+            }
+        }
+        
+        
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!invincible)
+        {
+            if (collision.gameObject.tag == "Barier")
+            {
+                statsManager.driverSmash.enabled = true;
+                pr.Play();
+                soundManager.PlaySound(0);
+
+                manager.hp -= 1;
+
+
+                manager.playerSpeed = 1;
+
+                manager.score = 0;
+
+                player.transform.position = new Vector3(-3, -3, 0);
+
+
+                ClearEnemies();
+                Invoke("ClearSmash", 1);
+                invincible = true;
+
+            }
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Barier" && !invincible)
+        if (!invincible)
         {
-            statsManager.driverSmash.enabled = true;
-            pr.Play();
-            soundManager.PlaySound(0);
+            if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Barier")
+            {
+                statsManager.driverSmash.enabled = true;
+                pr.Play();
+                soundManager.PlaySound(0);
 
-            manager.hp -= 1;
-
-
-            manager.playerSpeed = 1;
-
-            manager.score = 0;
-
-            player.transform.position = new Vector3(-3, -3, 0);
+                manager.hp -= 1;
 
 
-            ClearEnemies();
-            Invoke("ClearSmash", 1);
-            invincible = true;
+                manager.playerSpeed = 1;
 
+                manager.score = 0;
+
+                player.transform.position = new Vector3(-3, -3, 0);
+
+
+                ClearEnemies();
+                Invoke("ClearSmash", 1);
+                invincible = true;
+
+            }
         }
     }
 
