@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -8,25 +9,42 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
     public float speed = 2f;
     public bool invincible = false;
+    public bool shield = false;
 
-
-
+    public GameObject shieldSprite = null;
     public GameManager manager = null;
     public SoundManager soundManager = null;
     public StatsManager statsManager = null;
+    public PickUpEffect pickUpEffect = null;
     
     public ParticleSystem pr;
 
-    private void Awake()
+    private void Start()
     {
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         soundManager = GameObject.Find("SoundManager").GetComponent <SoundManager>();
         statsManager = GameObject.Find("Canvas").GetComponent<StatsManager>();
 
         statsManager.driverSmash.enabled = false;
+        shieldSprite.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (shield)
+        {
+            shieldSprite.SetActive(true);
+        }
+        else
+        {
+            shieldSprite.SetActive(false);
+        }
 
+        if (!invincible)
+        {
+            shield = false;
+        }
+    }
     void FixedUpdate()
     {
         float moveX = Input.GetAxis("Horizontal");
@@ -65,114 +83,194 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!invincible)
+        if (collision.gameObject.tag == "Enemy")
         {
-            if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Barier")
+            if (shield)
             {
-                statsManager.driverSmash.enabled = true;
+                Destroy(collision.gameObject);
                 pr.Play();
                 soundManager.PlaySound(0);
-
-                manager.hp -= 1;
-
-
-                manager.playerSpeed = 1;
-
-                manager.score = 0;
-
-                player.transform.position = new Vector3(-3, -3, 0);
-
-
-                ClearEnemies();
-                Invoke("ClearSmash", 1);
-                invincible = true;
-
+                invincible = false;
             }
-        }
-        
-        
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (!invincible)
-        {
-            if (collision.gameObject.tag == "Barier")
+            else
             {
-                statsManager.driverSmash.enabled = true;
-                pr.Play();
-                soundManager.PlaySound(0);
-
-                manager.hp -= 1;
+                if (!invincible)
+                {
 
 
-                manager.playerSpeed = 1;
+                    statsManager.driverSmash.enabled = true;
+                    pr.Play();
+                    soundManager.PlaySound(0);
 
-                manager.score = 0;
-
-                player.transform.position = new Vector3(-3, -3, 0);
+                    manager.hp -= 1;
 
 
-                ClearEnemies();
-                Invoke("ClearSmash", 1);
-                invincible = true;
+                    manager.playerSpeed = 1;
 
+                    manager.score = 0;
+
+                    player.transform.position = new Vector3(-3, -3, 0);
+
+
+                    ClearEnemies();
+                    Invoke("ClearSmash", 1);
+                    invincible = true;
+
+
+                }
             }
         }
+
+           
+
+        if (collision.gameObject.tag == "PickUp")
+        {
+            pickUpEffect = collision.gameObject.GetComponent<PickUpEffect>();
+
+            switch (pickUpEffect.pickUp)
+            {
+                case 1:
+                    manager.hp += 1;
+                    soundManager.PlaySound(2);
+                    Destroy(collision.gameObject);
+                    break;
+                case 2:
+                    invincible = true;
+                    shield = true;
+                    soundManager.PlaySound(2);
+                    Destroy(collision.gameObject);
+                    break;
+                case 3:
+                    manager.playerSpeed -= 1;
+                    soundManager.PlaySound(3);
+                    break;
+            }
+
+        }
+
+
     }
+
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (!invincible)
+        if (collision.gameObject.tag == "Barier")
         {
-            if (collision.gameObject.tag == "Barier")
+            if (shield)
             {
-                statsManager.driverSmash.enabled = true;
+                
                 pr.Play();
                 soundManager.PlaySound(0);
-
-                manager.hp -= 1;
-
-
-                manager.playerSpeed = 1;
-
-                manager.score = 0;
-
-                player.transform.position = new Vector3(-3, -3, 0);
+                invincible = false;
+            }
+            else
+            {
+                if (!invincible)
+                {
 
 
-                ClearEnemies();
-                Invoke("ClearSmash", 1);
-                invincible = true;
+                    statsManager.driverSmash.enabled = true;
+                    pr.Play();
+                    soundManager.PlaySound(0);
 
+                    manager.hp -= 1;
+
+
+                    manager.playerSpeed = 1;
+
+                    manager.score = 0;
+
+                    player.transform.position = new Vector3(-3, -3, 0);
+
+
+                    ClearEnemies();
+                    Invoke("ClearSmash", 1);
+                    invincible = true;
+
+
+                }
             }
         }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Barier")
+        {
+            if (shield)
+            {
+                
+                pr.Play();
+                soundManager.PlaySound(0);
+                invincible = false;
+            }
+            else
+            {
+                if (!invincible)
+                {
+
+
+                    statsManager.driverSmash.enabled = true;
+                    pr.Play();
+                    soundManager.PlaySound(0);
+
+                    manager.hp -= 1;
+
+
+                    manager.playerSpeed = 1;
+
+                    manager.score = 0;
+
+                    player.transform.position = new Vector3(-3, -3, 0);
+
+
+                    ClearEnemies();
+                    Invoke("ClearSmash", 1);
+                    invincible = true;
+
+
+                }
+            }
+        }
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!invincible)
+        if (collision.gameObject.tag == "Enemy")
         {
-            if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Barier")
+            if (shield)
             {
-                statsManager.driverSmash.enabled = true;
+                Destroy(collision.gameObject);
                 pr.Play();
                 soundManager.PlaySound(0);
-
-                manager.hp -= 1;
-
-
-                manager.playerSpeed = 1;
-
-                manager.score = 0;
-
-                player.transform.position = new Vector3(-3, -3, 0);
+                invincible = false;
+            }
+            else
+            {
+                if (!invincible)
+                {
 
 
-                ClearEnemies();
-                Invoke("ClearSmash", 1);
-                invincible = true;
+                    statsManager.driverSmash.enabled = true;
+                    pr.Play();
+                    soundManager.PlaySound(0);
 
+                    manager.hp -= 1;
+
+
+                    manager.playerSpeed = 1;
+
+                    manager.score = 0;
+
+                    player.transform.position = new Vector3(-3, -3, 0);
+
+
+                    ClearEnemies();
+                    Invoke("ClearSmash", 1);
+                    invincible = true;
+
+
+                }
             }
         }
     }

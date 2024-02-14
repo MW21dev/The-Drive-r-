@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class TreeSpawner : MonoBehaviour
 {
-    public float spawnTimeTree = 3f;
+    
     public float spawnTimeRoad = 1f;
+
+    float rndTime;
+    int rndPos;
 
     public GameObject tree;
     public GameObject roadPiece;
@@ -20,7 +23,8 @@ public class TreeSpawner : MonoBehaviour
     {
         Instantiate(roadPiece, new Vector3(-4.5f, 0, 0), Quaternion.identity);
 
-        Invoke("SpawnTree", spawnTimeTree);
+        Roll();
+        Invoke("SpawnTree", rndTime);
         Invoke("SpawnRoad", spawnTimeRoad);
 
 
@@ -28,9 +32,9 @@ public class TreeSpawner : MonoBehaviour
 
     private void Update()
     {
-        if(spawnTimeTree <= 0)
+        if(rndTime <= 0)
         {
-            spawnTimeTree = 0.1f;
+            rndTime = 0.1f;
         }
         if(spawnTimeRoad <= 0)
         {
@@ -40,11 +44,18 @@ public class TreeSpawner : MonoBehaviour
 
     void SpawnTree()
     {
-        Instantiate(tree, new Vector3(-8.2f, 8, 0), Quaternion.identity);
-        Instantiate(tree, new Vector3(-0.8f, 8, 0), Quaternion.identity);
-
-
-        Invoke("SpawnTree", spawnTimeTree);
+        if(rndPos > 25)
+        {
+            Instantiate(tree, new Vector3(-8.1f, 8, 0), Quaternion.identity);
+            Roll();
+        }
+        if(rndPos <= 25)
+        {
+            Instantiate(tree, new Vector3(-0.9f, 8, 0), Quaternion.identity);
+            Roll();
+        }
+        
+        Invoke("SpawnTree", rndTime);
     }
 
     void SpawnRoad()
@@ -53,5 +64,9 @@ public class TreeSpawner : MonoBehaviour
         Invoke("SpawnRoad", spawnTimeRoad);
     }
 
-    
+    void Roll()
+    {
+        rndTime = Random.Range(1f, 3f);
+        rndPos = Random.Range(0, 50);
+    }
 }

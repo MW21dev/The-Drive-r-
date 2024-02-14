@@ -27,7 +27,7 @@ public class CarDestroyer : MonoBehaviour
         }
 
 
-        if (collision.gameObject.tag == "Tree")
+        if (collision.gameObject.tag == "Tree" || collision.gameObject.tag == "PickUp")
         {
             Destroy(collision.gameObject);
         }

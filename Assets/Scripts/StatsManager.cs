@@ -61,19 +61,26 @@ public class StatsManager : MonoBehaviour
         }
 
 
-        if (manager.hp < 3)
+        
+
+        if (manager.hp == 3)
+        {
+            Hp3.enabled = true;
+            Hp2.enabled= true;
+            Hp1.enabled= true;
+        }
+        if (manager.hp == 2)
         {
             Hp3.enabled = false;
-            if (manager.hp < 2)
-            {
-                Hp2.enabled = false;
-                if(manager.hp < 1)
-                {
-                    Hp1.enabled = false;
-                }
-            }
+            Hp2.enabled = true;
+            Hp1.enabled= true;
         }
-
+        if (manager.hp == 1)
+        {
+            Hp3.enabled = false;
+            Hp2.enabled = false;
+            Hp1.enabled = true;
+        }
     }
 
     

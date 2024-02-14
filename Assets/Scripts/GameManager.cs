@@ -66,6 +66,11 @@ public class GameManager : MonoBehaviour
             playerSpeed = 15f;
         }
 
+        if(playerSpeed < 1)
+        {
+            playerSpeed = 1;
+        }
+
         if(hp < 1)
         {
             Time.timeScale = 0;
@@ -108,6 +113,11 @@ public class GameManager : MonoBehaviour
         {
             speedParticleW.Stop();
             speedParticleC.Stop();
+        }
+
+        if(hp > 3)
+        {
+            hp = 3;
         }
     }
 

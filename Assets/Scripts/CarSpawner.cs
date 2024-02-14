@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class CarSpawner : MonoBehaviour
 {
-    public float spawnTime = 3f;
+    public float spawnTime = 0f;
 
 
     public GameObject enemy;
+    public GameObject enemy2;
 
-    int rnd;
+    int rndPose;
+    int rndEnemy;
+    float rndScooterPose;
 
     public GameManager manager = null;
 
@@ -17,34 +20,57 @@ public class CarSpawner : MonoBehaviour
     {
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
-
-
     void Start()
     {
         
-        Invoke("Spawn", spawnTime);
         Roll();
+        
     }
+
+    private void Update()
+    {
+        spawnTime += Time.deltaTime;
+
+        if(spawnTime >= 3f)
+        {
+            spawnTime = 3f;
+        }
+
+        if(spawnTime == 3f)
+        {
+            Spawn();
+            spawnTime = 0f;
+        }
+    }
+
 
     void Spawn()
     {
         
-
-        if(rnd < 25)
+        if (rndEnemy < 3)
         {
-            Instantiate(enemy, new Vector3(-5.7f, 8, 0), Quaternion.identity);
+            Instantiate(enemy2, new Vector3(rndScooterPose, 9, 0), Quaternion.identity);
         }
-        else if (rnd > 25)
+        else if(rndEnemy >= 3)
         {
-            Instantiate(enemy, new Vector3(-3.3f, 8, 0), Quaternion.identity);
+            if (rndPose < 25)
+            {
+                Instantiate(enemy, new Vector3(-5.7f, 8, 0), Quaternion.identity);
+            }
+            else if (rndPose > 25)
+            {
+                Instantiate(enemy, new Vector3(-3.3f, 8, 0), Quaternion.identity);
+            }
         }
 
         Roll();
-        Invoke("Spawn", spawnTime);
+        
     }
 
     void Roll()
     {
-        rnd = Random.Range(0, 50);
+        rndPose = Random.Range(0, 50);
+        rndEnemy = Random.Range(0, 10);
+        rndScooterPose = Random.Range(-6.5f, -2.5f);
     }
 }
