@@ -34,7 +34,7 @@ public class StatsManager : MonoBehaviour
 
         scoreNb.text = manager.score.ToString();
         hiScoreNb.text = manager.score.ToString();
-        recordScoreNb.text = saveSystem.scoreData.recordScore.ToString();
+        recordScoreNb.text = manager.recordScore.ToString();
         speedNb.text = manager.playerSpeed.ToString();
 
     }
@@ -47,14 +47,11 @@ public class StatsManager : MonoBehaviour
         hiScoreNb.text = manager.hiScore.ToString();
         speedNb.text = manager.playerSpeed.ToString();
         finalHiScoreNb.text = manager.hiScore.ToString();
+        recordScoreNb.text = manager.recordScore.ToString();
 
-        if(manager.hiScore >= saveSystem.scoreData.recordScore)
-        {
-            saveSystem.scoreData.recordScore = manager.hiScore;
-            
-        }
+       
         
-        if(manager.hiScore >= saveSystem.scoreData.recordScore)
+        if(manager.hiScore >= manager.recordScore)
         {
             newRecord.SetActive(true);
         }
@@ -63,7 +60,6 @@ public class StatsManager : MonoBehaviour
             newRecord.SetActive(false);
         }
 
-        recordScoreNb.text = saveSystem.scoreData.recordScore.ToString();
 
         if (manager.hp < 3)
         {
