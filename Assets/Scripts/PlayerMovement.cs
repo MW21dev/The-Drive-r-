@@ -6,23 +6,27 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Transform player;
+    public SpriteRenderer playerRender;
     public Rigidbody2D rb;
     public float speed = 2f;
+    float speeder = 5f;
+    float speedUpTime = 0f;
     public bool invincible = false;
     public bool shield = false;
+    public bool speedUpP = false;
 
     public GameObject shieldSprite = null;
     public GameManager manager = null;
     public SoundManager soundManager = null;
     public StatsManager statsManager = null;
     public PickUpEffect pickUpEffect = null;
-    
+
     public ParticleSystem pr;
 
     private void Start()
     {
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        soundManager = GameObject.Find("SoundManager").GetComponent <SoundManager>();
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         statsManager = GameObject.Find("Canvas").GetComponent<StatsManager>();
 
         statsManager.driverSmash.enabled = false;
@@ -44,6 +48,28 @@ public class PlayerMovement : MonoBehaviour
         {
             shield = false;
         }
+
+        speedUpTime -= Time.deltaTime;
+
+        if (speedUpTime < 0)
+        {
+            speedUpTime = -1;
+            speedUpP = false;
+
+        }
+
+        
+
+        if (speedUpP)
+        {
+            playerRender.color = Color.magenta;
+            speed = speeder;
+        }
+        else
+        {
+            playerRender.color = Color.white;
+            speed = 2f;
+        }
     }
     void FixedUpdate()
     {
@@ -51,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.velocity = new Vector2(moveX * speed * Time.fixedDeltaTime, 0) * 100;
 
-        if(moveX > 0)
+        if (moveX > 0)
         {
             statsManager.driver.enabled = false;
             statsManager.driverR.enabled = false;
@@ -60,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, -5);
             //ojler
         }
-        if(moveX < 0)
+        if (moveX < 0)
         {
             statsManager.driver.enabled = false;
             statsManager.driverL.enabled = false;
@@ -103,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
                     soundManager.PlaySound(0);
 
                     manager.hp -= 1;
-
+                    speedUpP = false;
 
                     manager.playerSpeed = 1;
 
@@ -121,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-           
+
 
         if (collision.gameObject.tag == "PickUp")
         {
@@ -130,8 +156,10 @@ public class PlayerMovement : MonoBehaviour
             switch (pickUpEffect.pickUp)
             {
                 case 1:
-                    manager.hp += 1;
+                    speedUpP = true;
+                    speedUpTime = 4f;
                     soundManager.PlaySound(2);
+                    Invoke("PlaySound", 4f);
                     Destroy(collision.gameObject);
                     break;
                 case 2:
@@ -158,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (shield)
             {
-                
+
                 pr.Play();
                 soundManager.PlaySound(0);
                 invincible = false;
@@ -174,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
                     soundManager.PlaySound(0);
 
                     manager.hp -= 1;
-
+                    speedUpP = false;
 
                     manager.playerSpeed = 1;
 
@@ -198,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (shield)
             {
-                
+
                 pr.Play();
                 soundManager.PlaySound(0);
                 invincible = false;
@@ -212,9 +240,8 @@ public class PlayerMovement : MonoBehaviour
                     statsManager.driverSmash.enabled = true;
                     pr.Play();
                     soundManager.PlaySound(0);
-
                     manager.hp -= 1;
-
+                    speedUpP = false;
 
                     manager.playerSpeed = 1;
 
@@ -256,7 +283,7 @@ public class PlayerMovement : MonoBehaviour
                     soundManager.PlaySound(0);
 
                     manager.hp -= 1;
-
+                    speedUpP = false;
 
                     manager.playerSpeed = 1;
 
@@ -277,7 +304,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ClearEnemies()
     {
-        
+
 
         GameObject[] enemies;
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -295,7 +322,13 @@ public class PlayerMovement : MonoBehaviour
             Destroy(tree);
         }
 
+        GameObject[] pickUps;
+        pickUps = GameObject.FindGameObjectsWithTag("PickUp");
 
+        foreach (GameObject pickUp in pickUps)
+        {
+            Destroy(pickUp);
+        }
     }
 
     void ClearSmash()
@@ -303,4 +336,15 @@ public class PlayerMovement : MonoBehaviour
         statsManager.driverSmash.enabled = false;
         invincible = false;
     }
+
+    void PlaySound()
+    {
+        if (speedUpP)
+        {
+            soundManager.PlaySound(3);
+        }
+       
+    }
+
+    
 }

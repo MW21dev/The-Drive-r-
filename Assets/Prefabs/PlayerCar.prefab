@@ -150,14 +150,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1962084762094610981}
+  playerRender: {fileID: 1962084762094610978}
   rb: {fileID: 1962084762094610982}
   speed: 3
   invincible: 0
   shield: 0
+  speedUpP: 0
   shieldSprite: {fileID: 6241388197123698399}
   manager: {fileID: 0}
   soundManager: {fileID: 0}
   statsManager: {fileID: 0}
+  pickUpEffect: {fileID: 0}
   pr: {fileID: 1957641954905949809}
 --- !u!198 &1957641954905949809
 ParticleSystem:

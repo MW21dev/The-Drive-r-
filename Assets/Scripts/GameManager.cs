@@ -61,9 +61,9 @@ public class GameManager : MonoBehaviour
             
         }
        
-        if(playerSpeed > 15f)
+        if(playerSpeed > 10f)
         {
-            playerSpeed = 15f;
+            playerSpeed = 10f;
         }
 
         if(playerSpeed < 1)
@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
             musicManager.PauseMusic();
         }
 
-        if(playerSpeed >= 6)
+        if(playerSpeed >= 5)
         {
             speedParticleW.Play();
         }
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
             speedParticleC.Play();
         }
 
-        if(playerSpeed < 6)
+        if(playerSpeed < 5)
         {
             speedParticleW.Stop();
             speedParticleC.Stop();

@@ -9,6 +9,7 @@ public class CarSpawner : MonoBehaviour
 
     public GameObject enemy;
     public GameObject enemy2;
+    public GameObject enemy3;
 
     int rndPose;
     int rndEnemy;
@@ -47,11 +48,11 @@ public class CarSpawner : MonoBehaviour
     void Spawn()
     {
         
-        if (rndEnemy < 3)
+        if (rndEnemy >= 2 && rndEnemy <= 4 )
         {
             Instantiate(enemy2, new Vector3(rndScooterPose, 9, 0), Quaternion.identity);
         }
-        else if(rndEnemy >= 3)
+        else if(rndEnemy > 4)
         {
             if (rndPose < 25)
             {
@@ -60,6 +61,17 @@ public class CarSpawner : MonoBehaviour
             else if (rndPose > 25)
             {
                 Instantiate(enemy, new Vector3(-3.3f, 8, 0), Quaternion.identity);
+            }
+        }
+        else if(rndEnemy < 2)
+        {
+            if (rndPose < 25)
+            {
+                Instantiate(enemy3, new Vector3(-5.7f, 13, 0), Quaternion.identity);
+            }
+            else if (rndPose > 25)
+            {
+                Instantiate(enemy3, new Vector3(-3.3f, 13, 0), Quaternion.identity);
             }
         }
 
